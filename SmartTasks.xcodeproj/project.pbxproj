@@ -29,9 +29,22 @@
 		60A409DC2E92F00400D5FF61 /* SmartTasksUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SmartTasksUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		60FD1E092E93F86400EA8A26 /* Exceptions for "SmartTasks" folder in "SmartTasks" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 60A409C12E92F00200D5FF61 /* SmartTasks */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		60A409C42E92F00200D5FF61 /* SmartTasks */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				60FD1E092E93F86400EA8A26 /* Exceptions for "SmartTasks" folder in "SmartTasks" target */,
+			);
 			path = SmartTasks;
 			sourceTree = "<group>";
 		};
@@ -399,6 +412,7 @@
 				DEVELOPMENT_TEAM = 372Y6RQXS2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SmartTasks/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Smart tasks";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -435,6 +449,7 @@
 				DEVELOPMENT_TEAM = 372Y6RQXS2;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SmartTasks/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Smart tasks";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
