@@ -30,7 +30,7 @@ extension TasksService: TasksProviding {
         
         let request = URLRequest(url: url)
         
-        let (data, response) = try await httpClient.send(request)
+        let data = try await httpClient.send(request)
         
         let dto = try decoder.decode(Tasks.self, from: data)
         
