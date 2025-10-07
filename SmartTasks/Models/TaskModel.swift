@@ -14,7 +14,7 @@ import Foundation
     "Description": "Prepare onboarding sessions for new Dev member to come. Previous onboarding sessions could be find at www.example.com",
     "Priority": 3 // Can be missing
 */
-struct Task {
+struct TaskModel {
     let id: String
     let targetDate: Date
     let dueDate: Date?
@@ -23,7 +23,15 @@ struct Task {
     let priority: Int
 }
 
-extension Task: Decodable {
+extension TaskModel: Decodable {
+    static let dateFormat = "yyyy-MM-dd"
+
+     static var dateFormatter: DateFormatter {
+         let formatter = DateFormatter()
+         formatter.dateFormat = Self.dateFormat
+         return formatter
+     }
+    
     enum CodingKeys: String, CodingKey {
         case id
         case targetDate = "TargetDate"
@@ -36,10 +44,14 @@ extension Task: Decodable {
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(String.self, forKey: .id)
-        self.targetDate = try container.decode(Date.self, forKey: .targetDate)
-        self.dueDate = try container.decodeIfPresent(Date.self, forKey: .dueDate)
+        let targetDateString = try container.decode(String.self, forKey: .targetDate)
+        self.targetDate = TaskModel.dateFormatter.date(from: targetDateString) ?? Date()
+        let dueDateString = try container.decodeIfPresent(String.self, forKey: .dueDate) ?? ""
+        self.dueDate = TaskModel.dateFormatter.date(from: dueDateString) ?? Date()
         self.title = try container.decode(String.self, forKey: .title)
         self.description = try container.decode(String.self, forKey: .description)
         self.priority = try container.decodeIfPresent(Int.self, forKey: .priority) ?? 0
     }
 }
+
+extension TaskModel: Hashable {}

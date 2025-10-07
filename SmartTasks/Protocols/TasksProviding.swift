@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol TasksProviding {
-    func tasks() async throws -> [Task]
+protocol TasksProviding: Sendable {
+    func tasks() async throws -> [TaskModel]
 }

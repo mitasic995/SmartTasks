@@ -8,28 +8,25 @@
 import Foundation
 
 private enum Constants {
-    static let getTasksRequestUrl = "http://demo9877360.mockable.io/"
+    static let getTasksRequestUrl = "https://demo9877360.mockable.io/"
 }
 
 enum TasksServiceError: Error {
     case failedToDecodeResponse
 }
 
-class TasksService {
+final class TasksService {
     private let decoder: JSONDecoder
     private let httpClient: Networking
     
     init(httpClient: Networking) {
         self.httpClient = httpClient
         self.decoder = JSONDecoder()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "YYYY-MM-dd"
-        self.decoder.dateDecodingStrategy = .formatted(formatter)
     }
 }
 
 extension TasksService: TasksProviding {
-    func tasks() async throws -> [Task] {
+    func tasks() async throws -> [TaskModel] {
         do {
             guard let url = URL(string: Constants.getTasksRequestUrl) else { throw URLError(.badURL) }
             
@@ -37,7 +34,7 @@ extension TasksService: TasksProviding {
             
             let data = try await httpClient.send(request)
             
-            let dto = try decoder.decode(Tasks.self, from: data)
+            let dto = try decoder.decode(TasksModel.self, from: data)
             
             return dto.tasks
         } catch is DecodingError {

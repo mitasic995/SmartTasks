@@ -13,6 +13,6 @@ enum NetworkingError: Error {
     case clientError(Error)
 }
 
-protocol Networking {
+protocol Networking: Sendable {
     func send(_ request: URLRequest) async throws(NetworkingError) -> Data
 }
