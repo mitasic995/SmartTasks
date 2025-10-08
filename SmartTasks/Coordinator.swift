@@ -10,7 +10,7 @@ import SwiftUI
 enum AppScreens: Hashable {
     case intro
     case tasks
-    case taskDetails(TaskModel)
+    case taskDetails(SmartTask)
 }
 
 class Coordinator: ObservableObject {
