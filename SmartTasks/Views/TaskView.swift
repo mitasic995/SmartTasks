@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-private enum Constants {
+enum Constants {
     enum Spaces {
         static let small: CGFloat = 7
         static let medium: CGFloat = 10
@@ -21,24 +21,17 @@ private enum Constants {
 }
 
 struct TaskView: View {
+    let title: String
     let dueDate: String
     let daysLeft: String
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("Task title")
-                .padding(.top, Constants.Spaces.medium)
-                .padding(.bottom, Constants.Spaces.small)
-                .font(Font.smartTasksBold(15))
-                .foregroundStyle(.red)
+            TaskTitleView(title: title)
+            
             Divider()
             
-            HStack {
-                InnerView(label: "Due date", text: dueDate, alignment: .leading)
-                Spacer()
-                InnerView(label: "Days left", text: daysLeft, alignment: .trailing)
-            }
-            .padding([.top, .bottom], Constants.Spaces.medium)
+            TaskDueDateView(dueDate: dueDate, daysLeft: daysLeft)
         }
         .padding(.horizontal, Constants.Spaces.medium) // No guideline for this -> I eyeballed it.
         .background(.white)
@@ -48,25 +41,9 @@ struct TaskView: View {
     }
 }
 
-private struct InnerView: View  {
-    let label: String
-    let text: String
-    let alignment: HorizontalAlignment
-    
-    var body: some View {
-        VStack(alignment: alignment, spacing: Constants.Spaces.small) {
-            Text(label)
-                .font(Font.smartTasksRegular(10))
-                // Missing guideline for color
-            Text(text)
-                .boldedRed()
-        }
-    }
-}
-
 #Preview {
     ZStack {
         Color.smartTasksYellow
-        TaskView(dueDate: "10 Apr 2026", daysLeft: "10")
+        TaskView(title: "Task title", dueDate: "10 Apr 2026", daysLeft: "10")
     }
 }
