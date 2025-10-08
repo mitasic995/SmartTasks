@@ -12,4 +12,3 @@ struct TasksModel {
 }
 
 extension TasksModel: Decodable {}
-extension TasksModel: Hashable {}

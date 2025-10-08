@@ -21,7 +21,7 @@ class TasksViewModel: ObservableObject {
     
     func fetchTasks() async {
         do {
-            let tasks  = try await tasksService.tasks()
+            let fetchedTasks  = try await tasksService.getTasks()
             
             self.tasks = tasks
         } catch {

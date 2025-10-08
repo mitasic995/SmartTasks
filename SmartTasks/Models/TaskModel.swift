@@ -16,7 +16,7 @@ import Foundation
 */
 struct TaskModel {
     let id: String
-    let targetDate: Date
+    var targetDate: Date
     let dueDate: Date?
     let title: String
     let description: String
@@ -24,11 +24,12 @@ struct TaskModel {
 }
 
 extension TaskModel: Decodable {
-    static let dateFormat = "yyyy-MM-dd"
 
      static var dateFormatter: DateFormatter {
          let formatter = DateFormatter()
-         formatter.dateFormat = Self.dateFormat
+         formatter.dateFormat = "yyyy'-'MM'-'dd"
+         formatter.timeZone = .gmt
+         formatter.calendar = .init(identifier: .iso8601)
          return formatter
      }
     
@@ -47,11 +48,9 @@ extension TaskModel: Decodable {
         let targetDateString = try container.decode(String.self, forKey: .targetDate)
         self.targetDate = TaskModel.dateFormatter.date(from: targetDateString) ?? Date()
         let dueDateString = try container.decodeIfPresent(String.self, forKey: .dueDate) ?? ""
-        self.dueDate = TaskModel.dateFormatter.date(from: dueDateString) ?? Date()
+        self.dueDate = TaskModel.dateFormatter.date(from: dueDateString) ?? nil
         self.title = try container.decode(String.self, forKey: .title)
         self.description = try container.decode(String.self, forKey: .description)
         self.priority = try container.decodeIfPresent(Int.self, forKey: .priority) ?? 0
     }
 }
-
-extension TaskModel: Hashable {}

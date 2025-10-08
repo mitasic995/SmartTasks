@@ -8,5 +8,7 @@
 import Foundation
 
 protocol TasksProviding: Sendable {
-    func tasks() async throws -> [TaskModel]
+    /// Fetch array of smart tasks.
+    /// - Returns: Array of `TaskModel`
+    func getTasks() async throws -> [TaskModel]
 }

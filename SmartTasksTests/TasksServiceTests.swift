@@ -28,7 +28,7 @@ final class TasksServiceTests {
         
         // When
         do {
-            let tasks = try await sut.tasks()
+            let tasks = try await sut.getTasks()
             // Then
             #expect(!tasks.isEmpty)
             #expect(tasks.count == 18)
@@ -45,7 +45,7 @@ final class TasksServiceTests {
         // Then
         await #expect(throws: TasksServiceError.failedToDecodeResponse) {
             // When
-            try await sut.tasks()
+            try await sut.getTasks()
         }
     }
 }
