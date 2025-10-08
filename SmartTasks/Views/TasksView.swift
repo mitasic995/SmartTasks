@@ -19,11 +19,11 @@ struct TasksView: View {
         ZStack {
             Color.smartTasksYellow
                 .ignoresSafeArea()
-            if !viewModel.tasks.isEmpty {
+            if !viewModel.smartTasks.isEmpty {
                 VStack {
                     ScrollView {
-                        ForEach(viewModel.tasks, id: \.id) { task in
-                            TaskView(dueDate: task.dueDate?.description ?? "-", daysLeft: "0")
+                        ForEach(viewModel.smartTasks, id: \.id) { task in
+                            TaskView(title: task.title, dueDate: task.dueDate, daysLeft: task.daysLeft)
                                 .onTapGesture {
                                     coordinator.push(.taskDetails(task))
                                 }
@@ -40,18 +40,22 @@ struct TasksView: View {
         .toolbarBackground(Color.smartTasksYellow, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text("Today")
-                    .font(.smartTasksBold(20))
+                Text(viewModel.title)
+                    .font(.smartTasksBold(20)) // TODO: Move to ViewModifier
                     .foregroundColor(.white)
             }
             
             ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: { print("Leading Button Tapped") }) {
+                Button(action: {
+                    viewModel.goBackForOneDay()
+                }) {
                     Image(ImageResource.arrowBack)
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: { print("Trailing Button Tapped") }) {
+                Button(action: {
+                    viewModel.goForwardForOneDay()
+                }) {
                     Image(ImageResource.arrowForward)
                 }
             }
