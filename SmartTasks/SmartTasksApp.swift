@@ -9,9 +9,23 @@ import SwiftUI
 
 @main
 struct SmartTasksApp: App {
+    @State var introPresenting = true
     var body: some Scene {
         WindowGroup {
-            CoordinatorView()
+            ZStack {
+                CoordinatorView()
+                // Splash screen
+                IntroView()
+                    .opacity(introPresenting ? 1 : 0)
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                            withAnimation(.easeOut) {
+                                introPresenting = false
+                            }
+                        }
+                    }
+            }
+            
         }
     }
 }
