@@ -37,7 +37,7 @@ class Coordinator: ObservableObject {
         case .tasks:
             TasksView(service: dependencyContainer.tasksService)
         case let .taskDetails(model):
-            Text("Task details for task id:\(model.id)")
+            TaskDetailsView(model: model)
         }
     }
 }
