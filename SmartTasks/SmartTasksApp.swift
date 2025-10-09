@@ -18,7 +18,7 @@ struct SmartTasksApp: App {
                 IntroView()
                     .opacity(introPresenting ? 1 : 0)
                     .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                             withAnimation(.easeOut) {
                                 introPresenting = false
                             }
