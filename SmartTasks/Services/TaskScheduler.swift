@@ -14,7 +14,7 @@ protocol TaskScheduling {
     /// Update tasks, target dates according to today's date and group them by dates
     /// - Parameter tasks: Array of `TaskModel`that needs to be scheduled
     /// - Returns: Dictionary  of taks grouped by tasks's target date
-    static func scheduleTasks(_ tasks: [TaskModel]) -> [Date: [TaskModel]]
+    static func scheduleTasks(_ tasks: [TaskModel], forToday: Date) -> [Date: [TaskModel]]
 }
 
 final class TaskScheduler: TaskScheduling {
@@ -22,7 +22,8 @@ final class TaskScheduler: TaskScheduling {
         stripTimeComponentsFrom(.now) ?? .now
     }
     
-    static func scheduleTasks(_ tasks: [TaskModel]) -> [Date: [TaskModel]] {
+    static func scheduleTasks(_ tasks: [TaskModel], forToday today: Date) -> [Date: [TaskModel]] {
+        guard let today = stripTimeComponentsFrom(today) else { return [:] }
         return tasks
             .compactMap { task in
                 var task = task
