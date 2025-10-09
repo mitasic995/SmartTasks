@@ -27,11 +27,11 @@ struct TaskView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            TaskTitleView(title: title)
+            TaskTitleView(title: title, isResolved: .constant(false))
             
             Divider()
             
-            TaskDueDateView(dueDate: dueDate, daysLeft: daysLeft)
+            TaskDueDateView(dueDate: dueDate, daysLeft: daysLeft, isResolved: .constant(false))
         }
         .padding(.horizontal, Constants.Spaces.medium) // No guideline for this -> I eyeballed it.
         .background(.white)

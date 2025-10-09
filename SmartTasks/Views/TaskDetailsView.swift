@@ -26,11 +26,11 @@ struct TaskDetailsView: View {
                     .padding(.horizontal, Constants.Spaces.medium)
                     .overlay {
                         VStack(alignment: .leading, spacing: 0) {
-                            TaskTitleView(title: viewModel.task.title)
+                            TaskTitleView(title: viewModel.task.title, isResolved: .constant(viewModel.isTaskResolved))
                             
                             Divider()
                             
-                            TaskDueDateView(dueDate: viewModel.task.dueDate, daysLeft: viewModel.task.daysLeft)
+                            TaskDueDateView(dueDate: viewModel.task.dueDate, daysLeft: viewModel.task.daysLeft, isResolved: .constant(viewModel.isTaskResolved))
                             
                             Divider()
                             
@@ -78,11 +78,11 @@ struct TaskDetailsView: View {
                             .cornerRadius(Constants.cornerRadius)
                     }
                 }
-                .opacity(viewModel.task.status == .unresolved ? 1 : 0)
+                .opacity(viewModel.isTaskUnresolved ? 1 : 0)
                 .padding(.horizontal, Constants.Spaces.medium)
 
-                if viewModel.task.status != .unresolved {
-                    Image(viewModel.task.status == .resolved ? ImageResource.resolvedSign : ImageResource.unresolvedSign)
+                if !viewModel.isTaskUnresolved {
+                    Image(viewModel.isTaskResolved ? ImageResource.resolvedSign : ImageResource.unresolvedSign)
                 }
                 
                 Spacer()

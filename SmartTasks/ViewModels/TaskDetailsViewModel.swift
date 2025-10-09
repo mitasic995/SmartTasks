@@ -17,6 +17,14 @@ final class TaskDetailsViewModel: ObservableObject {
     @Published var task: SmartTask
     let actions: TaskDetailsViewModel.Actions
     
+    var isTaskResolved: Bool {
+        task.status == .resolved
+    }
+    
+    var isTaskUnresolved: Bool {
+        task.status == .unresolved
+    }
+    
     init(task: SmartTask, actions: TaskDetailsViewModel.Actions) {
         self.task = task
         self.actions = actions
