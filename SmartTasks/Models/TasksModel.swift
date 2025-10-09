@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// DTO model of main endpoint response.
 struct TasksModel {
     let tasks: [TaskModel]
 }

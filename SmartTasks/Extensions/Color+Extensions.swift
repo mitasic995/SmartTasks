@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUICore
 
+/// Helpers for using app's custom colors.
 extension Color {
     static let smartTasksGreen = Color("Green")
     static let smartTasksYellow = Color("Yellow")

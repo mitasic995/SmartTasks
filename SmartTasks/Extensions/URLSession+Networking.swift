@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Conforming to the `Networking` protocol.
 extension URLSession: Networking {
     func send(_ request: URLRequest) async throws(NetworkingError) -> Data {
         do {

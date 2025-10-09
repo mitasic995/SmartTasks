@@ -6,14 +6,8 @@
 //
 
 import Foundation
-/*
-    "id": "49dc9474cc5d4d0c9548c3953447f938",
-    "TargetDate": "2025-09-15",
-    "DueDate": "2025-09-20", // Can be null
-    "Title": "Onboarding - Dev",
-    "Description": "Prepare onboarding sessions for new Dev member to come. Previous onboarding sessions could be find at www.example.com",
-    "Priority": 3 // Can be missing
-*/
+
+/// Inner DTO model of main endpoint response.
 struct TaskModel {
     let id: String
     var targetDate: Date

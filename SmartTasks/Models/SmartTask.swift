@@ -8,6 +8,7 @@
 import Foundation
 import struct SwiftUICore.Color
 
+/// UI model that holds everything neccesery to be presented.
 struct SmartTask: Hashable {
     enum Status {
         case resolved

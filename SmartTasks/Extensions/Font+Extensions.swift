@@ -7,6 +7,7 @@
 
 import SwiftUICore
 
+/// Helpers for using app's custom fonts.
 extension Font {
     static func smartTasksRegular(_ size: CGFloat) -> Self {
         return .custom("AmsiPro-Regular", size: size)
