@@ -48,3 +48,4 @@ struct SmartTask: Hashable {
     let daysLeft: String
 }
 
+extension SmartTask.Status: Codable {}

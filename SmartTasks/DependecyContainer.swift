@@ -9,5 +9,12 @@ import Foundation
 
 final class DependencyContainer {
     let tasksService = TasksService(httpClient: URLSession.shared)
+    
     let taskScheduler = TaskScheduler.self
+    
+    let inMemoryStorage = InMemoryStorage()
+    
+    var tasksRepository: SmartTasksRepository {
+        SmartTasksRepository(localSource: inMemoryStorage, remoteSource: tasksService)
+    }
 }

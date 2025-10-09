@@ -35,7 +35,7 @@ class Coordinator: ObservableObject {
         case .intro:
             IntroView()
         case .tasks:
-            TasksView(tasksService: dependencyContainer.tasksService, taskScheduler: dependencyContainer.taskScheduler)
+            TasksView(repository: dependencyContainer.tasksRepository, taskScheduler: dependencyContainer.taskScheduler)
         case let .taskDetails(model):
             TaskDetailsView(model: model)
         }

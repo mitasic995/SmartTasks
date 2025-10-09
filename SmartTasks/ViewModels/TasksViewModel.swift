@@ -24,13 +24,13 @@ final class TasksViewModel: ObservableObject {
     }
     
     @Published private var schedule: [Date: [TaskModel]] = [:] 
-    private let tasksService: TasksProviding
+    private let repository: TasksRepository
     private let taskScheduler: TaskScheduling.Type
     private let calendar: Calendar
     private var smartTaskFormatter: DateFormatter
     private var cancellable = Set<AnyCancellable>()
     
-    init(tasksService: TasksProviding, taskScheduler: TaskScheduling.Type) {
+    init(repository: TasksRepository, taskScheduler: TaskScheduling.Type) {
         self.selectedDate = TaskScheduler.today
         var calendar = Calendar(identifier: .iso8601)
         calendar.timeZone = .gmt
@@ -40,7 +40,7 @@ final class TasksViewModel: ObservableObject {
         self.smartTaskFormatter = formatter
         
         self.calendar = calendar
-        self.tasksService = tasksService
+        self.repository = repository
         self.taskScheduler = taskScheduler
         
         $schedule
@@ -57,7 +57,7 @@ final class TasksViewModel: ObservableObject {
     
     func fetchTasks() async {
         do {
-            let fetchedTasks  = try await tasksService.getTasks()
+            let fetchedTasks  = try await repository.fetchTasks()
             self.schedule = taskScheduler.scheduleTasks(fetchedTasks, forToday: Date.now)
         } catch {
             errorMessage = "Oops! There's some problem."
@@ -73,7 +73,6 @@ final class TasksViewModel: ObservableObject {
         guard let updatedDate = calendar.date(byAdding: .day, value: -1, to: selectedDate) else { return }
         selectedDate = updatedDate
     }
-    
     
     private func convertToSmartTask(_ task: TaskModel) -> SmartTask {
         var dueDateString = "-"

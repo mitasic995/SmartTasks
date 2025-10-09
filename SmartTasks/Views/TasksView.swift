@@ -11,8 +11,8 @@ struct TasksView: View {
     @EnvironmentObject var coordinator: Coordinator
     @StateObject var viewModel: TasksViewModel
     
-    init(tasksService: TasksProviding, taskScheduler: TaskScheduling.Type) {
-        _viewModel = StateObject(wrappedValue: TasksViewModel(tasksService: tasksService, taskScheduler: taskScheduler))
+    init(repository: TasksRepository, taskScheduler: TaskScheduling.Type) {
+        _viewModel = StateObject(wrappedValue: TasksViewModel(repository: repository, taskScheduler: taskScheduler))
     }
     
     var body: some View {
@@ -77,7 +77,3 @@ private struct NoTasksForToday: View {
         }
     }
 }
-
-//#Preview {
-//    TasksView(viewModel: TasksViewModel(tasksService: TasksService(httpClient: URLSession.shared)))
-//}
