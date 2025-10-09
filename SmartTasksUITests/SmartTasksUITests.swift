@@ -22,22 +22,77 @@ final class SmartTasksUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    // TODO: Mock the app
+    
     @MainActor
-    func testExample() throws {
-        // UI tests must launch the application that they test.
+    func test_resolvedTask_shouldSave() {
         let app = XCUIApplication()
         app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        
+        let frenchLocalizationStaticText = app.scrollViews.otherElements.staticTexts["French localization"]
+        
+        frenchLocalizationStaticText
+            .tap()
+        
+        app.buttons["Resolve"]
+            .tap()
+        
+        let resolvedSignImage = app.images["Resolved sign"]
+        XCTAssertTrue(resolvedSignImage.exists)
+        
+        app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"]
+            /*@START_MENU_TOKEN@*/.buttons["Arrow back"]/*[[".otherElements[\"Arrow back\"].buttons[\"Arrow back\"]",".buttons[\"Arrow back\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+            .tap()
+        frenchLocalizationStaticText.tap()
+        
+        let alreadyResolved = app.images["Resolved sign"]
+        XCTAssertTrue(alreadyResolved.exists)
+                                
     }
-
+    
     @MainActor
-    func testLaunchPerformance() throws {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
-        }
+    func test_cantResolveTask_shouldSave() {
+        let app = XCUIApplication()
+        app.launch()
+        
+        let frenchLocalizationStaticText = app.scrollViews.otherElements.staticTexts["French localization"]
+        
+        frenchLocalizationStaticText
+            .tap()
+        
+        app.buttons["Can't resolve"]
+            .tap()
+        
+        let resolvedSignImage = app.images["Unresolved sign"]
+        XCTAssertTrue(resolvedSignImage.exists)
+        
+        app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"]
+            /*@START_MENU_TOKEN@*/.buttons["Arrow back"]/*[[".otherElements[\"Arrow back\"].buttons[\"Arrow back\"]",".buttons[\"Arrow back\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+            .tap()
+        frenchLocalizationStaticText.tap()
+        
+        let alreadyResolved = app.images["Unresolved sign"]
+        XCTAssertTrue(alreadyResolved.exists)
+                                
     }
+    
+    
+    func test_changingDays() {
+        let app = XCUIApplication()
+        app.launch()
+        let ttgc7swiftui32navigationstackhostingNavigationBar = app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"]
+        let todayStaticText = ttgc7swiftui32navigationstackhostingNavigationBar.staticTexts["Today"]
+        XCTAssertTrue(todayStaticText.exists)
+        
+        let arrowForwardButton = ttgc7swiftui32navigationstackhostingNavigationBar/*@START_MENU_TOKEN@*/.buttons["Arrow forward"]/*[[".otherElements[\"Arrow forward\"].buttons[\"Arrow forward\"]",".buttons[\"Arrow forward\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        arrowForwardButton.tap()
+        XCTAssertTrue(ttgc7swiftui32navigationstackhostingNavigationBar.staticTexts["Tomorrow"].exists)
+        
+        let arrowBackButton = ttgc7swiftui32navigationstackhostingNavigationBar/*@START_MENU_TOKEN@*/.buttons["Arrow back"]/*[[".otherElements[\"Arrow back\"].buttons[\"Arrow back\"]",".buttons[\"Arrow back\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        arrowBackButton.tap()
+        arrowBackButton.tap()
+        
+        XCTAssertTrue(ttgc7swiftui32navigationstackhostingNavigationBar.staticTexts["Yesterday"].exists)
+    }
+    
 }
