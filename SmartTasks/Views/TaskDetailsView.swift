@@ -9,7 +9,14 @@ import SwiftUI
 
 struct TaskDetailsView: View {
     @Environment(\.dismiss) var dismiss
-    let model: SmartTask
+    var model: SmartTask
+    
+    @State private var taskStatus: SmartTask.Status
+    
+    init(model: SmartTask) {
+        self._taskStatus = State(wrappedValue: model.status)
+        self.model = model
+    }
     
     var body: some View {
         ZStack {
@@ -18,7 +25,7 @@ struct TaskDetailsView: View {
             VStack {
                 Image(ImageResource.taskDetailsBg)
                     .resizable()
-                    .scaledToFit()
+                    .frame(height: 200)
                     .padding(.horizontal, Constants.Spaces.medium)
                     .overlay {
                         VStack(alignment: .leading, spacing: 0) {
@@ -37,14 +44,45 @@ struct TaskDetailsView: View {
                             
                             Divider()
                             
-                            Text(model.statusString)
+                            Text($taskStatus.wrappedValue.statusString)
                                 .font(.smartTasksBold(15))
-                                .foregroundStyle(model.statusColor)
+                                .foregroundStyle($taskStatus.wrappedValue.statusColor)
                                 .padding(.top, Constants.Spaces.medium)
-                            
                         }
                         .padding(.horizontal, 2 * Constants.Spaces.medium)
                     }
+                
+                HStack(spacing: 16) {
+                    Button(action: {
+                        taskStatus = .resolved
+                    }) {
+                        Text("Resolve")
+                            .font(.smartTasksBold(15))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.smartTasksGreen)
+                            .cornerRadius(Constants.cornerRadius)
+                    }
+                    
+                    Button(action: {
+                        taskStatus = .cantResolve
+                    }) {
+                        Text("Can't resolve")
+                            .font(.smartTasksBold(15))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.smartTasksRed)
+                            .cornerRadius(Constants.cornerRadius)
+                    }
+                }
+                .opacity(taskStatus == .unresolved ? 1 : 0)
+                .padding(.horizontal, Constants.Spaces.medium)
+
+                if taskStatus != .unresolved {
+                    Image(taskStatus == .resolved ? ImageResource.resolvedSign : ImageResource.unresolvedSign)
+                }
                 
                 Spacer()
             }
