@@ -37,7 +37,14 @@ class Coordinator: ObservableObject {
         case .tasks:
             TasksView(repository: dependencyContainer.tasksRepository, taskScheduler: dependencyContainer.taskScheduler)
         case let .taskDetails(model):
-            TaskDetailsView(model: model)
+            TaskDetailsView(
+                model: model,
+                actions: .init(
+                    resolveTask:dependencyContainer.tasksRepository.resolveTask(id: ),
+                    cantResolveTask: dependencyContainer.tasksRepository.cantResolveTask(id: ),
+                    tasksStatus: dependencyContainer.tasksRepository.tasksStatus(id:)
+                )
+            )
         }
     }
 }

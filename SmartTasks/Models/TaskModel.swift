@@ -17,7 +17,7 @@ struct TaskModel {
     let priority: Int
 }
 
-extension TaskModel: Decodable {
+extension TaskModel: Codable {
 
      static var dateFormatter: DateFormatter {
          let formatter = DateFormatter()
@@ -46,5 +46,19 @@ extension TaskModel: Decodable {
         self.title = try container.decode(String.self, forKey: .title)
         self.description = try container.decode(String.self, forKey: .description)
         self.priority = try container.decodeIfPresent(Int.self, forKey: .priority) ?? 0
+    }
+    
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(self.id, forKey: .id)
+        let targetDateString = TaskModel.dateFormatter.string(from: self.targetDate)
+        try container.encode(targetDateString, forKey: .targetDate)
+        if let dueDate = self.dueDate {
+            let dueDateString = TaskModel.dateFormatter.string(from: dueDate)
+            try container.encode(dueDateString, forKey: .dueDate)
+        }
+        try container.encode(self.title, forKey: .title)
+        try container.encode(self.description, forKey: .description)
+        try container.encode(self.priority, forKey: .priority)
     }
 }

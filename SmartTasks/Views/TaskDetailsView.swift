@@ -9,13 +9,10 @@ import SwiftUI
 
 struct TaskDetailsView: View {
     @Environment(\.dismiss) var dismiss
-    var model: SmartTask
+    @ObservedObject var viewModel: TaskDetailsViewModel
     
-    @State private var taskStatus: SmartTask.Status
-    
-    init(model: SmartTask) {
-        self._taskStatus = State(wrappedValue: model.status)
-        self.model = model
+    init(model: SmartTask, actions: TaskDetailsViewModel.Actions) {
+        self.viewModel = TaskDetailsViewModel(task: model, actions: actions)
     }
     
     var body: some View {
@@ -29,24 +26,24 @@ struct TaskDetailsView: View {
                     .padding(.horizontal, Constants.Spaces.medium)
                     .overlay {
                         VStack(alignment: .leading, spacing: 0) {
-                            TaskTitleView(title: model.title)
+                            TaskTitleView(title: viewModel.task.title)
                             
                             Divider()
                             
-                            TaskDueDateView(dueDate: model.dueDate, daysLeft: model.daysLeft)
+                            TaskDueDateView(dueDate: viewModel.task.dueDate, daysLeft: viewModel.task.daysLeft)
                             
                             Divider()
                             
-                            Text(model.description)
+                            Text(viewModel.task.description)
                             .lineLimit(6)
                             .font(.smartTasksRegular(10))
                             .padding(.vertical, Constants.Spaces.medium)
                             
                             Divider()
                             
-                            Text($taskStatus.wrappedValue.statusString)
+                            Text(viewModel.task.status.statusString)
                                 .font(.smartTasksBold(15))
-                                .foregroundStyle($taskStatus.wrappedValue.statusColor)
+                                .foregroundStyle(viewModel.task.status.statusColor)
                                 .padding(.top, Constants.Spaces.medium)
                         }
                         .padding(.horizontal, 2 * Constants.Spaces.medium)
@@ -54,7 +51,9 @@ struct TaskDetailsView: View {
                 
                 HStack(spacing: 16) {
                     Button(action: {
-                        taskStatus = .resolved
+                        Task { @MainActor in
+                            await viewModel.resolveTask()
+                        }
                     }) {
                         Text("Resolve")
                             .font(.smartTasksBold(15))
@@ -66,7 +65,9 @@ struct TaskDetailsView: View {
                     }
                     
                     Button(action: {
-                        taskStatus = .cantResolve
+                        Task { @MainActor in
+                            await viewModel.cantResolveTask()
+                        }
                     }) {
                         Text("Can't resolve")
                             .font(.smartTasksBold(15))
@@ -77,11 +78,11 @@ struct TaskDetailsView: View {
                             .cornerRadius(Constants.cornerRadius)
                     }
                 }
-                .opacity(taskStatus == .unresolved ? 1 : 0)
+                .opacity(viewModel.task.status == .unresolved ? 1 : 0)
                 .padding(.horizontal, Constants.Spaces.medium)
 
-                if taskStatus != .unresolved {
-                    Image(taskStatus == .resolved ? ImageResource.resolvedSign : ImageResource.unresolvedSign)
+                if viewModel.task.status != .unresolved {
+                    Image(viewModel.task.status == .resolved ? ImageResource.resolvedSign : ImageResource.unresolvedSign)
                 }
                 
                 Spacer()
@@ -103,6 +104,9 @@ struct TaskDetailsView: View {
                     Image(ImageResource.arrowBack)
                 }
             }
+        }
+        .task {
+            await viewModel.updateTaskStatus()
         }
     }
 }
