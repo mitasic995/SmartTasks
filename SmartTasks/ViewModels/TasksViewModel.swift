@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 @MainActor
 final class TasksViewModel: ObservableObject {
@@ -22,12 +23,14 @@ final class TasksViewModel: ObservableObject {
         }
     }
     
-    private var schedule: [Date: [TaskModel]] = [:]
+    @Published private var schedule: [Date: [TaskModel]] = [:] 
     private let tasksService: TasksProviding
+    private let taskScheduler: TaskScheduling.Type
     private let calendar: Calendar
     private var smartTaskFormatter: DateFormatter
+    private var cancellable = Set<AnyCancellable>()
     
-    init(tasksService: TasksProviding) {
+    init(tasksService: TasksProviding, taskScheduler: TaskScheduling.Type) {
         self.selectedDate = TaskScheduler.today
         var calendar = Calendar(identifier: .iso8601)
         calendar.timeZone = .gmt
@@ -38,17 +41,24 @@ final class TasksViewModel: ObservableObject {
         
         self.calendar = calendar
         self.tasksService = tasksService
+        self.taskScheduler = taskScheduler
+        
+        $schedule
+            .dropFirst()
+            .sink { [weak self] updatedSchedule in
+                guard let self else { return }
+                let tasks = updatedSchedule[self.selectedDate] ?? []
+                self.smartTasks = tasks.compactMap { model in
+                    self.convertToSmartTask(model)
+                }
+            }
+            .store(in: &cancellable)
     }
     
     func fetchTasks() async {
         do {
             let fetchedTasks  = try await tasksService.getTasks()
-            self.schedule = TaskScheduler.scheduleTasks(fetchedTasks)
-            let tasks = schedule[selectedDate] ?? []
-            self.smartTasks = tasks.compactMap { [weak self] model in
-                self?.convertToSmartTask(model)
-            }
-            
+            self.schedule = taskScheduler.scheduleTasks(fetchedTasks)
         } catch {
             errorMessage = "Oops! There's some problem."
         }
@@ -70,7 +80,7 @@ final class TasksViewModel: ObservableObject {
         var daysLeft = "-"
         if let dueDate = task.dueDate {
             dueDateString = smartTaskFormatter.string(from: dueDate)
-            daysLeft = String(Calendar.current.dateComponents([.day], from: task.targetDate, to: dueDate).day ?? 0)
+            daysLeft = String(calendar.dateComponents([.day], from: task.targetDate, to: dueDate).day ?? 0)
         }
 
         return SmartTask(

@@ -9,4 +9,5 @@ import Foundation
 
 final class DependencyContainer {
     let tasksService = TasksService(httpClient: URLSession.shared)
+    let taskScheduler = TaskScheduler.self
 }

@@ -11,8 +11,8 @@ struct TasksView: View {
     @EnvironmentObject var coordinator: Coordinator
     @StateObject var viewModel: TasksViewModel
     
-    init(service: TasksProviding) {
-        _viewModel = StateObject(wrappedValue: TasksViewModel(tasksService: service))
+    init(tasksService: TasksProviding, taskScheduler: TaskScheduling.Type) {
+        _viewModel = StateObject(wrappedValue: TasksViewModel(tasksService: tasksService, taskScheduler: taskScheduler))
     }
     
     var body: some View {
