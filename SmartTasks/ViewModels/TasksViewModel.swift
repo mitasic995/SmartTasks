@@ -57,7 +57,7 @@ final class TasksViewModel: ObservableObject {
     
     func fetchTasks() async {
         do {
-            let fetchedTasks  = try await repository.fetchTasks()
+            let fetchedTasks  = try await repository.fetchTasks().sorted()
             self.schedule = taskScheduler.scheduleTasks(fetchedTasks, forToday: Date.now)
         } catch {
             errorMessage = "Oops! There's some problem."

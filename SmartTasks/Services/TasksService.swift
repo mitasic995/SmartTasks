@@ -37,9 +37,7 @@ extension TasksService: TasksProviding {
             
             let dto = try decoder.decode(TasksModel.self, from: data)
             
-            return dto.tasks.sorted(by: { left, right in
-                left.priority > right.priority
-            })
+            return dto.tasks
         } catch is DecodingError {
             throw TasksServiceError.failedToDecodeResponse
         } catch {

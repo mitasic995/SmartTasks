@@ -62,3 +62,11 @@ extension TaskModel: Codable {
         try container.encode(self.priority, forKey: .priority)
     }
 }
+
+extension Array where Element == TaskModel {
+    func sorted() -> Self {
+        self.sorted(by: { left, right in
+            left.priority > right.priority
+        })
+    }
+}
